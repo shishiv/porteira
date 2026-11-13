@@ -45,8 +45,10 @@ const PADROES: Readonly<Record<RegraEntrada, readonly RegExp[]>> = {
 function normalizar(original: string): { texto: string; origem: number[] } {
   let texto = "";
   const origem: number[] = [];
-  for (let i = 0; i < original.length; i++) {
-    const caractere = original[i] ?? "";
+  let proximo = 0;
+  for (const caractere of original) {
+    const i = proximo;
+    proximo += caractere.length;
     if (/\p{Cf}/u.test(caractere)) continue;
     const limpo = caractere.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
     for (const c of limpo) {
