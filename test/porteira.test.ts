@@ -134,3 +134,12 @@ describe("permissão por ferramenta", () => {
     });
   });
 });
+
+describe("ferramentas da lanchonete", () => {
+  it("recusa pedido com item que não está no cardápio", async () => {
+    const executar = criarFerramentas();
+    expect(
+      await executar({ nome: "registrar_pedido", argumentos: { itens: [{ item: "X-Tudo grande", quantidade: 1 }] } }),
+    ).toEqual({ ok: false, motivo: "Itens do pedido inválidos." });
+  });
+});

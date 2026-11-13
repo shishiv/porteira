@@ -15,7 +15,9 @@ function lerItens(valor: unknown): PedidoItem[] | undefined {
   if (!Array.isArray(valor)) return undefined;
   const itens = valor.filter(
     (v): v is PedidoItem =>
-      typeof v === "object" && v !== null && typeof v.item === "string" && Number.isInteger(v.quantidade) && v.quantidade > 0,
+      typeof v === "object" && v !== null && typeof v.item === "string" &&
+      CARDAPIO.some((c) => c.nome === v.item) &&
+      Number.isInteger(v.quantidade) && v.quantidade > 0,
   );
   return itens.length === valor.length ? itens : undefined;
 }

@@ -55,7 +55,7 @@ function normalizar(original: string): { texto: string; origem: number[] } {
       const espaco = /\s/.test(c);
       if (espaco && texto.endsWith(" ")) continue;
       texto += espaco ? " " : c;
-      origem.push(i);
+      for (let k = 0; k < c.length; k++) origem.push(i);
     }
   }
   return { texto, origem };
