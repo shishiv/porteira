@@ -42,7 +42,7 @@ const DETECTORES: readonly Detector[] = [
   },
   {
     regra: "cpf",
-    padrao: /(?<!\d)(?:\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})(?!\d)/g,
+    padrao: /(?<!\d)\d{3}[. ]?\d{3}[. ]?\d{3}[- ]?\d{2}(?!\d)/g,
     confere: cpfValido,
     mascarar: () => "***.***.***-**",
   },
@@ -54,8 +54,14 @@ const DETECTORES: readonly Detector[] = [
   },
   {
     regra: "telefone",
-    padrao: /(?<![\d*])(?:\+?55[ -]?)?(?:\(\d{2}\)|\d{2})[ -]?(?:9[ -]?)?\d{4}[ -]?\d{4}(?!\d)/g,
-    confere: telefoneValido,
+    padrao: /(?<![\d*])(?:\+?55[ -]?)?(?:\(0?\d{2}\)|0?\d{2})[ -]?(?:9[ -]?)?\d{4}[ -]?\d{4}(?!\d)/g,
+    confere: (achado) => telefoneValido(achado.replace(/^(\D*)0/, "$1")),
+    mascarar: () => "(**) *****-****",
+  },
+  {
+    regra: "telefone",
+    padrao: /(?<![\d*-])9\d{4}-\d{4}(?![\d-])/g,
+    confere: sempre,
     mascarar: () => "(**) *****-****",
   },
 ];

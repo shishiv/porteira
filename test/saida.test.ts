@@ -27,6 +27,12 @@ describe("checagem da resposta que sai", () => {
     );
   });
 
+  it("mascara CPF com espaços e telefone com zero no DDD ou sem DDD", () => {
+    expect(mascararSaida("CPF 744 468 591 61, tel (034) 90000-3333 ou 90000-3333").texto).toBe(
+      "CPF ***.***.***-**, tel (**) *****-**** ou (**) *****-****",
+    );
+  });
+
   it("mascara chave Pix aleatória", () => {
     expect(mascararSaida("Pix: 123e4567-e89b-42d3-a456-426614174000").texto).toBe(
       "Pix: ********-****-****-****-************",
