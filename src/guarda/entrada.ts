@@ -50,7 +50,7 @@ function normalizar(original: string): { texto: string; origem: number[] } {
     const i = proximo;
     proximo += caractere.length;
     if (/\p{Cf}/u.test(caractere)) continue;
-    const limpo = caractere.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+    const limpo = caractere.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase();
     for (const c of limpo) {
       const espaco = /\s/.test(c);
       if (espaco && texto.endsWith(" ")) continue;
