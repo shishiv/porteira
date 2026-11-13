@@ -55,18 +55,25 @@ const tela = {
   limpar: achar<HTMLButtonElement>("limpar"),
 };
 
-let ferramentas = criarFerramentas();
+type Modo = Registro["modo"];
+
+/** Cada modo tem o próprio pedido aberto, para o desconto obedecido sem guarda não aparecer com ela. */
+const novasFerramentas = (): Record<Modo, ExecutarFerramenta> => ({
+  "com-guarda": criarFerramentas(),
+  "sem-guarda": criarFerramentas(),
+});
+let ferramentas = novasFerramentas();
 
 async function enviar(de: Remetente, texto: string): Promise<Registro> {
   const mensagem: Mensagem = { de: NUMEROS[de], texto };
   if (tela.guarda.checked) {
-    const { resposta, decisoes } = await criarPorteira(roboDaLanchonete, ferramentas, POLITICA).atender(mensagem);
+    const { resposta, decisoes } = await criarPorteira(roboDaLanchonete, ferramentas["com-guarda"], POLITICA).atender(mensagem);
     return { de, texto, resposta, modo: "com-guarda", decisoes };
   }
   const chamadas: ChamadaFerramenta[] = [];
   const executarGravando: ExecutarFerramenta = (chamada) => {
     chamadas.push(chamada);
-    return ferramentas(chamada);
+    return ferramentas["sem-guarda"](chamada);
   };
   const resposta = await roboDaLanchonete.responder(mensagem, executarGravando);
   return { de, texto, resposta, modo: "sem-guarda", chamadas };
@@ -185,7 +192,7 @@ tela.envio.addEventListener("submit", (evento) => {
   void mandar(tela.remetente.value === "dono" ? "dono" : "cliente", texto);
 });
 tela.limpar.addEventListener("click", () => {
-  ferramentas = criarFerramentas();
+  ferramentas = novasFerramentas();
   tela.conversa.replaceChildren();
   tela.relatorio.replaceChildren();
 });
