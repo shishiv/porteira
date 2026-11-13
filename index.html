@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Porteira: guarda para robôs de atendimento no WhatsApp</title>
+    <link rel="stylesheet" href="./src/demo/estilo.css" />
+  </head>
+  <body>
+    <header class="topo">
+      <div class="marca">
+        <strong>Porteira</strong>
+        <span class="aviso">Robô simulado: respostas fixas, sem IA</span>
+      </div>
+      <label class="chave">
+        <input type="checkbox" id="guarda" checked />
+        <span class="trilho" aria-hidden="true"></span>
+        <span id="guarda-rotulo">Com guarda</span>
+      </label>
+    </header>
+
+    <main class="palco">
+      <section class="celular" aria-label="Conversa no WhatsApp">
+        <div class="contato">
+          <span class="avatar" aria-hidden="true">TB</span>
+          <div>
+            <strong id="nome-lanchonete"></strong>
+            <small>robô de atendimento</small>
+          </div>
+          <button type="button" id="limpar" class="limpar">Limpar</button>
+        </div>
+        <ol id="conversa" class="conversa" aria-live="polite"></ol>
+        <div class="atalhos">
+          <div class="grupo"><span>Ataques</span><div id="ataques"></div></div>
+          <div class="grupo"><span>Normais</span><div id="normais"></div></div>
+        </div>
+        <form id="envio" class="envio">
+          <select id="remetente" aria-label="Quem envia">
+            <option value="cliente">Cliente</option>
+            <option value="dono">Dono</option>
+          </select>
+          <input id="texto" type="text" autocomplete="off" placeholder="Mensagem" aria-label="Mensagem" />
+          <button type="submit">Enviar</button>
+        </form>
+      </section>
+
+      <section class="painel" aria-label="O que a guarda fez">
+        <h2>O que a guarda fez</h2>
+        <ol id="relatorio" class="relatorio"></ol>
+      </section>
+    </main>
+
+    <script type="module" src="./src/demo/main.ts"></script>
+  </body>
+</html>
