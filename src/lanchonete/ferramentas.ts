@@ -11,7 +11,6 @@ export type NomeFerramenta = keyof typeof PERMISSOES;
 
 export type PedidoItem = { readonly item: string; readonly quantidade: number };
 
-/** As ferramentas de verdade da lanchonete: o que roda quando o robô pede, se ninguém barrar. */
 function lerItens(valor: unknown): PedidoItem[] | undefined {
   if (!Array.isArray(valor)) return undefined;
   const itens = valor.filter(
@@ -25,6 +24,7 @@ function lerPercentual(valor: unknown): number | undefined {
   return typeof valor === "number" && valor >= 0 && valor <= 100 ? valor : undefined;
 }
 
+/** As ferramentas de verdade da lanchonete: o que roda quando o robô pede, se ninguém barrar. */
 export function criarFerramentas(): ExecutarFerramenta {
   let subtotalCentavos = 0;
   let percentual = 0;
