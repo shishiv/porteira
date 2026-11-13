@@ -41,10 +41,11 @@ const PADROES: Readonly<Record<RegraEntrada, readonly RegExp[]>> = {
   ],
 };
 
-/** Texto em minúsculas, sem acento, com cada caractere apontando para a posição dele no original. */
-function normalizar(original: string): { texto: string; origem: number[] } {
+/** Texto em minúsculas, sem acento, com cada caractere apontando para o início e o fim dele no original. */
+function normalizar(original: string): { texto: string; origem: number[]; fins: number[] } {
   let texto = "";
   const origem: number[] = [];
+  const fins: number[] = [];
   let proximo = 0;
   for (const caractere of original) {
     const i = proximo;
@@ -55,21 +56,24 @@ function normalizar(original: string): { texto: string; origem: number[] } {
       const espaco = /\s/.test(c);
       if (espaco && texto.endsWith(" ")) continue;
       texto += espaco ? " " : c;
-      for (let k = 0; k < c.length; k++) origem.push(i);
+      for (let k = 0; k < c.length; k++) {
+        origem.push(i);
+        fins.push(proximo);
+      }
     }
   }
-  return { texto, origem };
+  return { texto, origem, fins };
 }
 
 export function checarEntrada(mensagem: string): ChecagemEntrada {
-  const { texto, origem } = normalizar(mensagem);
+  const { texto, origem, fins } = normalizar(mensagem);
   const achados: Achado[] = [];
   for (const [regra, padroes] of Object.entries(PADROES) as [RegraEntrada, readonly RegExp[]][]) {
     for (const padrao of padroes) {
       const encontrado = padrao.exec(texto);
       if (!encontrado) continue;
       const inicio = origem[encontrado.index] ?? 0;
-      const fim = (origem[encontrado.index + encontrado[0].length - 1] ?? inicio) + 1;
+      const fim = fins[encontrado.index + encontrado[0].length - 1] ?? inicio;
       achados.push({ regra, trecho: mensagem.slice(inicio, fim) });
       break;
     }
