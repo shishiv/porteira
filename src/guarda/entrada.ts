@@ -47,7 +47,7 @@ function normalizar(original: string): { texto: string; origem: number[] } {
   const origem: number[] = [];
   for (let i = 0; i < original.length; i++) {
     const caractere = original[i] ?? "";
-    if (/[\u200B-\u200D\uFEFF]/.test(caractere)) continue;
+    if (/\p{Cf}/u.test(caractere)) continue;
     const limpo = caractere.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
     for (const c of limpo) {
       const espaco = /\s/.test(c);

@@ -33,6 +33,13 @@ describe("checagem da resposta que sai", () => {
     );
   });
 
+  it("mascara telefone com +55 como telefone, mesmo quando passa no Luhn", () => {
+    expect(mascararSaida("cliente +55 34 90000-1119")).toEqual({
+      texto: "cliente (**) *****-****",
+      mascaras: [{ regra: "telefone", quantidade: 1 }],
+    });
+  });
+
   it("mascara chave Pix aleatória", () => {
     expect(mascararSaida("Pix: 123e4567-e89b-42d3-a456-426614174000").texto).toBe(
       "Pix: ********-****-****-****-************",

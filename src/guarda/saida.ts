@@ -49,7 +49,7 @@ const DETECTORES: readonly Detector[] = [
   {
     regra: "cartao",
     padrao: /(?<!\d)\d(?:[ -]?\d){12,18}(?!\d)/g,
-    confere: luhnValido,
+    confere: (achado) => luhnValido(achado) && !telefoneValido(achado),
     mascarar: (achado) => `**** **** **** ${achado.replace(/\D/g, "").slice(-4)}`,
   },
   {
