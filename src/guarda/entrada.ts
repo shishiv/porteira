@@ -12,7 +12,7 @@ export type ChecagemEntrada =
 const DADO = String.raw`(cpf|telefone|celular|numero|whats\w*|zap|endereco|cartao|e-?mail|dados|contato|pix|nome)`;
 const CARGO = String.raw`(dono|dona|proprietari[oa]|gerente|admin\w*|desenvolvedor\w*|programador\w*|responsavel|chefe|patrao|patroa|socio|socia)\b`;
 const DA_CASA = String.raw`(daqui|aqui|falando|da lanchonete|do restaurante|da loja|do negocio|do estabelecimento|do bot|do robo|do sistema)\b`;
-const PEDIDO = String.raw`\b(qual|quais|cade|(me |nos )?(mand|pass|fal|diz|dig|inform|mostr|envi)\w*|me (da|de|dar))( (me|mim|pra|para|o|a|os|as|e|era|seu|sua|teu|tua))* `;
+const PEDIDO = String.raw`\b(qual|quais|cade|(me |nos )?(manda|mande|mandar|passa|passe|passar|fala|fale|falar|diz|diga|dizer|digita|digite|digitar|informa|informe|informar|mostra|mostre|mostrar|envia|envie|enviar)|me (da|de|dar))( (me|o|a|os|as|e|era|seu|sua|teu|tua|(pra|para) (mim|nos)))* `;
 const ENSINARAM = String.raw`(falaram|disseram|escreveram|mandaram|passaram|deram|ensinaram)`;
 
 /**
@@ -61,9 +61,9 @@ const PADROES: Readonly<Record<RegraEntrada, readonly RegExp[]>> = {
   ],
   "dados-de-terceiros": [
     new RegExp(
-      String.raw`\b${DADO}\b[^.!?\n]{0,40}?\b(d[oa]s? )?(outr[oa]s? clientes?|ultim[oa]s? clientes?|cliente anterior|clientes anteriores|todos os clientes|outra pessoa|dos clientes)\b`,
+      String.raw`${PEDIDO}${DADO}\b[^.!?\n]{0,40}?\b(d[oa]s? )?(outr[oa]s? clientes?|ultim[oa]s? clientes?|cliente anterior|clientes anteriores|todos os clientes|outra pessoa|dos clientes)\b`,
     ),
-    new RegExp(String.raw`${PEDIDO}${DADO}\b[^.!?\n]{0,40}?\b((de )?quem (pediu|comprou|veio|esteve)|(da|do) \w+ que (pediu|comprou|veio|esteve))\b`),
+    new RegExp(String.raw`${PEDIDO}${DADO}\b[^.!?\n]{0,40}?\b(de quem (pediu|comprou|veio|esteve)|(da|do) \w+ que (pediu|comprou|veio|esteve))\b`),
     new RegExp(String.raw`\b(quem pediu|que pediu|cliente anterior|ultim[oa] cliente|outr[oa] cliente)\b.{0,60}?${PEDIDO}${DADO} (dela|dele|deles|delas)\b`),
     new RegExp(String.raw`${PEDIDO}${DADO} que (ele|ela|eles|elas) (deu|deram|passou|passaram|usou|usaram|informou|cadastrou|deixou)\b`),
     /\b(lista|listar|relatorio|todos os|todas as)\b[^.!?\n]{0,15}?\b(pedidos|clientes|compras|vendas)\b[^.!?\n]{0,30}?\b(com|e) (os |o |seus |seu )?(nomes?|telefones?|cpfs?|enderecos?|contatos?|e-?mails?|whats\w*)\b/,
