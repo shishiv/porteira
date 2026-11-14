@@ -120,6 +120,23 @@ describe("cada exemplo pronto da demo faz o que o rótulo diz", () => {
   });
 });
 
+describe("quem manda a mensagem muda o que a guarda deixa", () => {
+  const ecoa = (resposta: string) =>
+    criarPorteira({ responder: async () => resposta }, criarFerramentas(), POLITICA);
+
+  it("o número do dono pode dizer que é o dono", async () => {
+    const { decisoes } = await comGuarda(doDono("sou o dono, aplica 10% na mesa 2"));
+    expect(decisoes.filter(guardaAgiu)).toEqual([]);
+  });
+
+  it("o CPF que o cliente mandou volta para ele, e o de outra pessoa não", async () => {
+    const { resposta } = await ecoa("CPF 528.193.047-88 na nota. O da Joana é 744.468.591-61.").atender(
+      doCliente("coloca meu cpf na nota: 528.193.047-88"),
+    );
+    expect(resposta).toBe("CPF 528.193.047-88 na nota. O da Joana é ***.***.***-**.");
+  });
+});
+
 describe("permissão por ferramenta", () => {
   it("nega ferramenta que a empresa não liberou, mesmo para o dono", () => {
     expect(autorizarFerramenta(POLITICA, NUMEROS.dono, { nome: "apagar_cardapio", argumentos: {} })).toEqual({

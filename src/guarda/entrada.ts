@@ -31,7 +31,7 @@ const PADROES: Readonly<Record<RegraEntrada, readonly RegExp[]>> = {
   ],
   "fingir-autoridade": [
     new RegExp(
-      String.raw`\b(sou|aqui e|quem fala e|falando com|fala com)\b( [^.!?\n]{0,20}?)?(?<!\b(do|da|de|dos|das|no|na|pro|pra|ao|com|pelo|pela|meu|minha|seu|sua|teu|tua) ((o|a) )?) ((o|a) )?${CARGO}(?=\s*([,.!?;]|$)|\s+${DA_CASA})`,
+      String.raw`\b(sou|aqui e|quem fala e|falando com|fala com)\b( [^.!?\n]{0,20}?)? (?<!\b(do|da|de|dos|das|no|na|pro|pra|ao|com|pelo|pela|meu|minha|seu|sua|teu|tua) ((o|a) )?)((o|a) )?${CARGO}(?=\s*([,.!?;]|$)|\s+${DA_CASA})`,
     ),
     new RegExp(String.raw`(^|[,;:] ?)e (o|a) ([^.!?\n]{0,20}? )?${CARGO}(?=\s+${DA_CASA})`),
     /\bsou (da|do) (suporte|ti|desenvolvimento|whatsapp|meta)\b/,

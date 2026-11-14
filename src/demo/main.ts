@@ -16,6 +16,8 @@ import {
   roboDaLanchonete,
   type Exemplo,
 } from "../lanchonete/index.ts";
+import { achar, elemento } from "./dom.ts";
+import { mostrarPlacar } from "./placar.ts";
 
 type Remetente = keyof typeof NUMEROS;
 
@@ -24,23 +26,6 @@ type Registro = { readonly de: Remetente; readonly texto: string; readonly respo
   | { readonly modo: "com-guarda"; readonly decisoes: readonly Decisao[] }
   | { readonly modo: "sem-guarda"; readonly chamadas: readonly ChamadaFerramenta[] }
 );
-
-function elemento<K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  classe?: string,
-  ...filhos: (Node | string)[]
-): HTMLElementTagNameMap[K] {
-  const el = document.createElement(tag);
-  if (classe) el.className = classe;
-  el.append(...filhos);
-  return el;
-}
-
-function achar<T extends HTMLElement>(id: string): T {
-  const el = document.getElementById(id);
-  if (!el) throw new Error(`Elemento #${id} não existe na página`);
-  return el as T;
-}
 
 const tela = {
   guarda: achar<HTMLInputElement>("guarda"),
@@ -197,3 +182,4 @@ tela.limpar.addEventListener("click", () => {
   tela.relatorio.replaceChildren();
 });
 mostrarModo();
+void mostrarPlacar(achar("placar"));

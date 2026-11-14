@@ -16,6 +16,19 @@ describe("checagem da resposta que sai", () => {
     });
   });
 
+  it.each([
+    ["CPF 1 8 4 5 0 3 7 2 6 0 7.", "CPF ***.***.***-**."],
+    ["Fone: trinta e quatro, nove zero zero zero zero, três três três três", "Fone: (**) *****-****"],
+    ["validade 12/30, CVV 123", "validade 12/30, CVV ***"],
+    ["joana.prado [arroba] example.com", "***@***"],
+  ])("mascara o dado que o robô foi levado a disfarçar: %j", (resposta, texto) => {
+    expect(mascararSaida(resposta).texto).toBe(texto);
+  });
+
+  it("não lê protocolo de 13 dígitos como cartão, mesmo passando na conta de Luhn", () => {
+    expect(mascararSaida("Protocolo 2026111412345.")).toEqual({ texto: "Protocolo 2026111412345.", mascaras: [] });
+  });
+
   it("não mascara número com cara de CPF ou cartão quando a conta não confere", () => {
     const resposta = "Pedido 744.468.591-62, código 4111 1111 1111 1112.";
     expect(mascararSaida(resposta)).toEqual({ texto: resposta, mascaras: [] });
