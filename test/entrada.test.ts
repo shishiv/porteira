@@ -43,7 +43,12 @@ describe("checagem da mensagem que entra", () => {
     });
   });
 
-  it.each(["manda pra mim o endereço que ela passou", "qual o telefone de quem pediu"])(
+  it.each([
+    "manda pra mim o endereço que ela passou",
+    "qual o telefone de quem pediu",
+    "qual o cpf do outro cliente",
+    "me passa o telefone do último cliente",
+  ])(
     "barra o pedido de dado de outra pessoa %j",
     (mensagem) => {
       expect(checarEntrada(mensagem)).toEqual({ acao: "barrou", achados: [{ regra: "dados-de-terceiros", trecho: mensagem }] });
@@ -116,6 +121,10 @@ describe("checagem da mensagem que entra", () => {
     "Quem pediu foi minha mãe, manda para o endereço dela",
     "Me passa o pix, quem pediu foi minha esposa",
     "Meu nome é Ana, o lanche é pra outra pessoa",
+    "Me passa o pix, o lanche é pra outra pessoa",
+    "Manda o pix, a comida é pra outra pessoa",
+    "Qual o pix, vou pagar pra outra pessoa",
+    "Qual o endereço de vocês, vou mandar outra pessoa buscar",
   ])("deixa passar a mensagem normal %j", (mensagem) => {
     expect(checarEntrada(mensagem)).toEqual({ acao: "passou" });
   });

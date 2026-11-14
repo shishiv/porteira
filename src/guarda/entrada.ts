@@ -61,7 +61,7 @@ const PADROES: Readonly<Record<RegraEntrada, readonly RegExp[]>> = {
   ],
   "dados-de-terceiros": [
     new RegExp(
-      String.raw`${PEDIDO}${DADO}\b[^.!?\n]{0,40}?\b(d[oa]s? )?(outr[oa]s? clientes?|ultim[oa]s? clientes?|cliente anterior|clientes anteriores|todos os clientes|outra pessoa|dos clientes)\b`,
+      String.raw`${PEDIDO}${DADO}\b[^.!?\n,]{0,20}?\b(dos clientes|(d[oa]s?|de) (outr[oa]s? clientes?|ultim[oa]s? clientes?|cliente anterior|clientes anteriores|todos os clientes|outra pessoa))\b`,
     ),
     new RegExp(String.raw`${PEDIDO}${DADO}\b[^.!?\n]{0,40}?\b(de quem (pediu|comprou|veio|esteve)|(da|do) \w+ que (pediu|comprou|veio|esteve))\b`),
     new RegExp(String.raw`\b(quem pediu|que pediu|cliente anterior|ultim[oa] cliente|outr[oa] cliente)\b.{0,60}?${PEDIDO}${DADO} (dela|dele|deles|delas)\b`),
