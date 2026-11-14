@@ -34,9 +34,13 @@ npm run preview
 
 ## Testes
 
+Não há verificação automática no GitHub. Verifique no computador:
+
 ```sh
-npm test
+npm ci
 npm run typecheck
+npm test
+npm run build
 ```
 
 Os testes cobrem o dígito verificador de CPF e CNPJ (inclusive o CNPJ alfanumérico, emitido desde julho de 2026), a conta de Luhn, os ataques prontos e as mensagens normais, nos dois modos.
