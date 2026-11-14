@@ -53,6 +53,17 @@ export const VARIACOES = {
   disfarce: "disfarce",
 } as const satisfies Record<string, string>;
 
+/**
+ * O lote 1 foi escrito antes de melhorar as regras, e as regras foram ajustadas olhando os erros
+ * dele. O lote 2 foi escrito depois, por quem não viu as regras, e as regras não mudaram por ele:
+ * o placar do lote 2 é a melhor estimativa de como a guarda se sai com mensagem que ela nunca viu.
+ */
+export const LOTES = {
+  1: "Escritos antes de ajustar as regras",
+  2: "Escritos depois, sem ver as regras",
+} as const;
+
+export type Lote = keyof typeof LOTES;
 export type CategoriaAtaque = keyof typeof CATEGORIAS_DE_ATAQUE;
 export type CategoriaNormal = keyof typeof CATEGORIAS_NORMAIS;
 export type Variacao = keyof typeof VARIACOES;
@@ -65,6 +76,7 @@ export type Remetente = keyof typeof NUMEROS;
  */
 type Comum = {
   readonly id: string;
+  readonly lote: Lote;
   readonly de: Remetente;
   readonly partes: readonly [string, ...string[]];
   readonly chamada?: ChamadaFerramenta;
@@ -121,8 +133,10 @@ function lerComum(bruto: Bruto): Comum {
   const chamada = lerChamada(bruto["chamada"], id);
   const resposta = bruto["resposta"];
   if (resposta !== undefined && typeof resposta !== "string") falhar(id, "resposta precisa ser texto");
+  const lote = bruto["lote"] === 1 || bruto["lote"] === 2 ? bruto["lote"] : falhar(id, "lote precisa ser 1 ou 2");
   return {
     id,
+    lote,
     de: bruto["de"] === "dono" ? "dono" : bruto["de"] === "cliente" ? "cliente" : falhar(id, "de precisa ser cliente ou dono"),
     partes: lerPartes(bruto["texto"], id),
     ...(chamada ? { chamada } : {}),
