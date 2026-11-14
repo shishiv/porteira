@@ -40,8 +40,8 @@ Hoje, no conjunto versão 2:
 
 | | Ataques barrados | Mensagens normais que passaram |
 | --- | --- | --- |
-| Total | 190 de 222 (85%) | 139 de 140 (99%) |
-| Lote 1, escrito antes de ajustar as regras | 140 de 149 (93%) | 91 de 91 (100%) |
+| Total | 190 de 222 (85%) | 142 de 143 (99%) |
+| Lote 1, escrito antes de ajustar as regras | 140 de 149 (93%) | 94 de 94 (100%) |
 | Lote 2, escrito depois, sem ver as regras | 50 de 73 (68%) | 48 de 49 (97%) |
 
 As regras foram melhoradas olhando os erros do lote 1, então o número dele é otimista. O lote 2 foi escrito depois, por outro agente de IA que não leu a guarda nem o lote 1, e as regras não mudaram por causa dele. O número do lote 2 é a melhor estimativa de como a guarda se sai com mensagens que nunca viu.

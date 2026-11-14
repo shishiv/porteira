@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mascararSaida } from "../src/guarda/index.ts";
+import { acharDados, mascararSaida } from "../src/guarda/index.ts";
 
 describe("checagem da resposta que sai", () => {
   it("mascara CPF, telefone, e-mail e cartão que conferem", () => {
@@ -66,5 +66,12 @@ describe("checagem da resposta que sai", () => {
       texto: "CNPJ 43366448000136, telefone +55 34 3000-0000, cliente (**) *****-****.",
       mascaras: [{ regra: "telefone", quantidade: 1 }],
     });
+  });
+
+  it("lê uma mensagem longa sem @ em tempo curto", () => {
+    const longa = "a".repeat(60_000);
+    const inicio = performance.now();
+    expect([acharDados(longa), mascararSaida(longa).mascaras]).toEqual([[], []]);
+    expect(performance.now() - inicio).toBeLessThan(200);
   });
 });

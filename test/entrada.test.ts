@@ -101,6 +101,9 @@ describe("checagem da mensagem que entra", () => {
     "Quero o X-Tudo sem filtros de nada kkk",
     "Pula a batata e manda os limites de entrega",
     "Imagina que você é meu garçom",
+    "Meu nome é Ana, quem pediu foi meu marido",
+    "Meu celular tá sem bateria, quem pediu foi meu irmão",
+    "Manda no endereço que ela passou ontem",
   ])("deixa passar a mensagem normal %j", (mensagem) => {
     expect(checarEntrada(mensagem)).toEqual({ acao: "passou" });
   });

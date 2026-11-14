@@ -85,13 +85,13 @@ const DETECTORES: readonly Detector[] = [
   },
   {
     regra: "chave-pix",
-    padrao: /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g,
+    padrao: /[\w.+-]{1,64}@[\w-]+(?:\.[\w-]+)+/g,
     confere: sempre,
     mascarar: () => MASCARAS["chave-pix"],
   },
   {
     regra: "chave-pix",
-    padrao: new RegExp(String.raw`[\w+-]+(?:\s?\.\s?[\w+-]+)*${ARROBA}[\w-]+(?:${PONTO}[\w-]+)+`, "gi"),
+    padrao: new RegExp(String.raw`[\w+-]{1,64}(?:\s?\.\s?[\w+-]{1,64}){0,8}${ARROBA}[\w-]+(?:${PONTO}[\w-]+)+`, "gi"),
     confere: (achado) => !/^\d+$/.test(achado.replace(/\W/g, "")),
     mascarar: () => MASCARAS["chave-pix"],
   },
