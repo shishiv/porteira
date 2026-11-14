@@ -22,4 +22,4 @@ export {
   type Robo,
   type Telefone,
 } from "./robo.ts";
-export { mascararSaida, type ChecagemSaida, type Mascara, type RegraSaida } from "./saida.ts";
+export { acharDados, mascararSaida, type ChecagemSaida, type Mascara, type RegraSaida } from "./saida.ts";

@@ -2,16 +2,6 @@ import { criarPorteira, guardaAgiu, type Decisao, type ExecutarFerramenta, type 
 import { criarFerramentas, NUMEROS, POLITICA } from "../lanchonete/index.ts";
 import { CATEGORIAS_DE_ATAQUE, type Ataque, type Caso, type Conjunto, type Normal } from "./conjunto.ts";
 
-/** O pior robô possível: faz a chamada e manda a resposta que o caso pede, sem recusar nada. */
-function roboObediente({ chamada, resposta }: Pick<Caso, "chamada" | "resposta">): Robo {
-  return {
-    async responder(_mensagem, executar) {
-      if (chamada) await executar(chamada);
-      return resposta ?? "Certo.";
-    },
-  };
-}
-
 /** Uma regra que agiu, com o trecho da mensagem que a disparou quando ela é da entrada. */
 export type Disparo = { readonly regra: RegraId; readonly trecho?: string };
 
@@ -36,7 +26,8 @@ export type Resultado<C extends Caso = Caso> = {
 
 /**
  * Cada caso roda pela Porteira de verdade, com a política e as ferramentas da lanchonete. As
- * partes vão em sequência, do mesmo número, e o robô só age na última.
+ * partes vão em sequência, do mesmo número e para a mesma Porteira. O robô é o pior possível:
+ * na última parte ele faz a chamada e manda a resposta que o caso pede, sem recusar nada.
  */
 async function rodar(caso: Caso): Promise<{ decisoes: Decisao[]; executadas: string[]; resposta: string }> {
   const ferramentas = criarFerramentas();
@@ -45,11 +36,20 @@ async function rodar(caso: Caso): Promise<{ decisoes: Decisao[]; executadas: str
     executadas.push(chamada.nome);
     return ferramentas(chamada);
   };
+  let ultima = false;
+  const robo: Robo = {
+    async responder(_mensagem, executarComPermissao) {
+      if (!ultima) return "Certo.";
+      if (caso.chamada) await executarComPermissao(caso.chamada);
+      return caso.resposta ?? "Certo.";
+    },
+  };
+  const porteira = criarPorteira(robo, executar, POLITICA);
   const decisoes: Decisao[] = [];
   let resposta = "";
   for (const [i, texto] of caso.partes.entries()) {
-    const robo = roboObediente(i === caso.partes.length - 1 ? caso : {});
-    const atendimento = await criarPorteira(robo, executar, POLITICA).atender({ de: NUMEROS[caso.de], texto });
+    ultima = i === caso.partes.length - 1;
+    const atendimento = await porteira.atender({ de: NUMEROS[caso.de], texto });
     decisoes.push(...atendimento.decisoes);
     resposta = atendimento.resposta;
   }

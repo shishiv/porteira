@@ -1,7 +1,7 @@
 import { checarEntrada, type Achado } from "./entrada.ts";
 import type { RegraDaEtapa } from "./regras.ts";
 import type { ChamadaFerramenta, ExecutarFerramenta, Mensagem, Robo, Telefone } from "./robo.ts";
-import { mascararSaida, type Mascara } from "./saida.ts";
+import { acharDados, mascararSaida, type Mascara } from "./saida.ts";
 
 /** Quem pode pedir cada ferramenta. Ferramenta fora da lista não roda para ninguém. */
 export type Permissao = "todos" | "dono";
@@ -57,12 +57,13 @@ export type Porteira = { atender(mensagem: Mensagem): Promise<Atendimento> };
 
 /**
  * Põe a guarda entre o WhatsApp e o robô: checa a mensagem antes do robô ler, cada
- * ferramenta antes de rodar e a resposta antes de sair.
+ * ferramenta antes de rodar e a resposta antes de sair. O número do dono pode dizer que é o
+ * dono, e o dado que a pessoa mandou na mensagem pode voltar para ela na resposta.
  */
 export function criarPorteira(robo: Robo, executar: ExecutarFerramenta, politica: Politica): Porteira {
   return {
     async atender(mensagem) {
-      const entrada = checarEntrada(mensagem.texto);
+      const entrada = checarEntrada(mensagem.texto, mensagem.de === politica.dono ? ["fingir-autoridade"] : []);
       if (entrada.acao === "barrou") {
         return {
           resposta: politica.respostaBarrada,
@@ -78,7 +79,8 @@ export function criarPorteira(robo: Robo, executar: ExecutarFerramenta, politica
         return executar(chamada);
       };
 
-      const saida = mascararSaida(await robo.responder(mensagem, executarComPermissao), politica.dadosPublicos);
+      const liberados = [...politica.dadosPublicos, ...acharDados(mensagem.texto)];
+      const saida = mascararSaida(await robo.responder(mensagem, executarComPermissao), liberados);
       decisoes.push(
         saida.mascaras.length > 0
           ? { etapa: "saida", acao: "mascarou", mascaras: saida.mascaras }
